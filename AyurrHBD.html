@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="mn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Happy Birthday</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Inter,Arial}
+    body{background:#080d1a;color:white;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+
+    .card{
+      width:90%;max-width:900px;padding:40px;border-radius:20px;
+      background:linear-gradient(135deg,#1c2340,#0d1226);
+      box-shadow:0 10px 40px rgba(0,0,0,0.55);
+      position:relative;overflow:hidden;text-align:center;
+    }
+
+    /* Mongolz logo */
+    .logo{
+      width:120px;position:absolute;top:20px;left:20px;
+      filter:drop-shadow(0 0 14px rgba(0,162,255,0.6));
+    }
+
+    h1{
+      font-size:52px;font-weight:900;margin-top:20px;
+      background:linear-gradient(90deg,#3fa9ff,#6bffe7,#9d72ff);
+      -webkit-background-clip:text;color:transparent;letter-spacing:2px;
+      text-shadow:0 0 20px rgba(255,255,255,0.25);
+    }
+
+    .msg{
+      margin-top:16px;font-size:20px;line-height:1.5;
+      color:#e9ecff;text-shadow:0 0 10px rgba(255,255,255,0.18);
+    }
+
+    /* Big Name */
+    .bigname{
+      margin-top:30px;font-size:46px;font-weight:800;
+      letter-spacing:3px;color:#7cd6ff;text-shadow:0 0 22px #178bff;
+    }
+
+    /* Footer */
+    .footer{
+      margin-top:30px;font-size:20px;color:#fff;
+      font-weight:700;text-shadow:0 0 14px rgba(255,255,255,0.4);
+    }
+
+    /* Confetti */
+    canvas{position:absolute;inset:0;pointer-events:none;}
+  </style>
+</head>
+<body>
+<div class="card">
+  <img src="mongolz_logo.png" class="logo" alt="mongolz logo">
+  <canvas id="confetti"></canvas>
+
+  <h1>HAPPY BIRTHDAY 🎉</h1>
+
+  <div class="msg">
+    Үргэлж инээж баяр хөөр бэлэглэдэгт баярлалаа.<br>
+    Хорвоод хосгүй эрдэнэ болон мэндэлсэнд<br>
+    баяр хүргэе 🥳✨
+  </div>
+
+  <div class="bigname">TERGEL — AYURR</div>
+
+  <div class="footer">Бадрангуйгаас ❤️</div>
+</div>
+
+<script>
+  const canvas = document.getElementById('confetti');
+  const ctx = canvas.getContext('2d');
+  let W = canvas.width = innerWidth;
+  let H = canvas.height = innerHeight;
+  window.onresize = ()=>{W=canvas.width=innerWidth;H=canvas.height=innerHeight};
+
+  function rand(a,b){return Math.random()*(b-a)+a}
+  class Conf{
+    constructor(){
+      this.x=rand(0,W);this.y=rand(-H,0);
+      this.vx=rand(-1,1);this.vy=rand(2,6);
+      this.size=rand(6,12);
+      this.color=`hsl(${rand(0,360)} 90% 65%)`;
+    }
+    update(){this.x+=this.vx;this.y+=this.vy;if(this.y>H)this.y=rand(-H,0)}
+    draw(){ctx.fillStyle=this.color;ctx.fillRect(this.x,this.y,this.size,this.size)}
+  }
+
+  let parts=[];
+  function spawn(n=120){
+    parts=[];for(let i=0;i<n;i++)parts.push(new Conf());
+    animate();
+    setTimeout(()=>running=false,5000);
+  }
+
+  let running=true;
+  function animate(){
+    if(!running)return;
+    ctx.clearRect(0,0,W,H);
+    parts.forEach(p=>{p.update();p.draw()});
+    requestAnimationFrame(animate);
+  }
+
+  setTimeout(()=>spawn(180),800);
+</script>
+
+</body>
+</html>
